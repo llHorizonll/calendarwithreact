@@ -1,0 +1,15 @@
+.form-register {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  margin: -160px 0 0 -160px;
+  width: 320px;
+  height: 340px;
+  padding: 36px;
+  -webkit-box-shadow: 0 0 100px rgba(0, 0, 0, .08);
+  box-shadow: 0 0 100px rgba(0, 0, 0, .08);
+}
+
+.form-register p {
+  color: rgb(204, 204, 204);
+}

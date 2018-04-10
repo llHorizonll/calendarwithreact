@@ -1,0 +1,27 @@
+{
+  "name": "calendar",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "antd": "^3.4.0",
+    "fullcalendar-reactwrapper": "^1.0.7",
+    "localforage": "^1.7.1",
+    "moment": "^2.22.0",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.1",
+    "serve": "^6.5.3",
+    "styled-components": "^3.2.5"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.6.7",
+    "react-app-rewired": "^1.5.0"
+  }
+}
