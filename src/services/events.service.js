@@ -1,7 +1,7 @@
 import localforage from 'localforage';
-import eventdata from '../assets/event.json';
+import eventdata from '../assets/events.json';
 
-export const service = {
+export const eventService = {
   get,
   searchevent,
   update,
@@ -51,6 +51,7 @@ function get() {
   return localforage.getItem('events')
     .then(res => {
       if (!res) {
+        console.log('data not found')
         return localforage.setItem('events', eventdata)
           .then(output => {
             return output;

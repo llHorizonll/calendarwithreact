@@ -1,0 +1,23 @@
+[
+  {
+    "username": "test",
+    "name": "test",
+    "color": "blue",
+    "textColor": "white",
+    "show": true
+  },
+  {
+    "username": "test1",
+    "name": "test1",
+    "color": "red",
+    "textColor": "white",
+    "show": true
+  },
+  {
+    "username": "test2",
+    "name": "test2",
+    "color": "green",
+    "textColor": "white",
+    "show": true
+  }
+]

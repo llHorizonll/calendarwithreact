@@ -5,9 +5,10 @@ import List from './components/List';
 import Navbar from './components/Navbar';
 import Calendar from './components/Calendarwrap';
 import './fullcalendar.css';
-import eventdata from './assets/event.json';
+//import eventdata from './assets/event.json';
 import { Layout } from 'antd';
-import { service } from './services/events.service';
+import { eventService } from './services/events.service';
+import { userService } from './services/users.service';
 const { Content, Sider } = Layout;
 
 class App extends Component {
@@ -24,19 +25,28 @@ class App extends Component {
       },
       btnsearch: false,
       collapsed: false,
+      displayColorPicker: false,
       searchvalue: '',
       data: '',
       datasearch: '',
       datatemp: '',
-      user: 'test1' //add event of test1
+      userlist: '',
+      user: JSON.parse(localStorage.getItem('user')), //add event of test1
+      maincolor: 'blue'
     }
   }
+
   componentDidMount() {
-    service.get().then(res => {
+    eventService.get().then(res => {
       this.setState({
         data: res,
         datasearch: res,
         datatemp: res.slice(),
+      })
+    })
+    userService.get().then(res => {
+      this.setState({
+        userlist: res,
       })
     })
   }
@@ -63,7 +73,7 @@ class App extends Component {
         },
         searchvalue: ''
       });
-      service.update().then(res => {
+      eventService.update().then(res => {
         this.setState({
           data: res.filter(item => (item.show) ? item : ''),
           datasearch: res,
@@ -76,7 +86,7 @@ class App extends Component {
     if (!e.target.value) {
       e.target.value = ''
     }
-    service.searchevent(e.target.value).then(res => {
+    eventService.searchevent(e.target.value).then(res => {
       this.setState({
         data: res.filter(item => (item.show) ? item : ''),
         datasearch: res,
@@ -105,7 +115,7 @@ class App extends Component {
         },
         searchvalue: e.target.value
       })
-      service.get().then(res => {
+      eventService.get().then(res => {
         this.setState({
           data: res.filter(item => (item.show) ? item : ''),
           datasearch: res,
@@ -114,10 +124,9 @@ class App extends Component {
     }
   }
 
-  handleClick(name, value) {
-    // let newdata = eventdata.map(a => ({ ...a }))
+  handleCheckbox(name, value) {
     this.setState({
-      datatemp: this.state.datatemp.filter((item) => {
+      userlist: this.state.userlist.filter((item) => {
         if (item.name === name) {
           item.show = value;
         }
@@ -135,19 +144,21 @@ class App extends Component {
 
   addEvent({ title = '', startdate = '', enddate = '', description = '' }) {
     let newevent = {
+      id: 0,
       title: title,
       start: startdate.format('YYYY-MM-DD'),
       end: (enddate.add(1, 'days')).format('YYYY-MM-DD'),
       description: description
     }
-    let x = eventdata.map(a => ({ ...a }))
-    let newdata = x.filter(item => {
-      if (item.name === this.state.user) {
+    let newdata = this.state.data.filter(item => {
+      if (item.name === this.state.user.username) {
+        item.color = this.state.user.color;
+        newevent.id = item.events.length + 1;
         item.events.push(newevent)
       }
       return item;
     });
-    service.update(newdata).then(res => {
+    eventService.update(newdata).then(res => {
       this.setState({
         data: res,
       })
@@ -159,28 +170,89 @@ class App extends Component {
     event.start = newevent.startdate.format('YYYY-MM-DD')
     event.end = (newevent.enddate.add(1, 'days')).format('YYYY-MM-DD')
     event.description = newevent.description
-
-    let newdata = eventdata.filter(item => {
+    let newdata = this.state.data.filter(item => {
       if (item.name === event.source.name) {
         item.events = event.source.events
       }
       return item;
     });
-    service.update(newdata).then(res => {
+    eventService.update(newdata).then(res => {
       this.setState({
         data: res,
       })
     })
   }
 
+  deleteEvent(event) {
+    let newdata = this.state.data.filter((item) => {
+      if (item.name === event.source.name) {
+        return item.events = (item.events).filter(subitem => subitem.id !== event.id)
+      }
+      return item;
+    });
+    eventService.update(newdata).then(res => {
+      this.setState({
+        data: res,
+      })
+    })
+  }
+
+  toggleOpencolor = () => {
+    this.setState({ displayColorPicker: !this.state.displayColorPicker })
+  }
+
+  toggleClosecolor = () => {
+    this.setState({ displayColorPicker: false })
+  }
+
+  toggleChangecolor = (color) => {
+    this.setState({
+      maincolor: color.hex
+    })
+  
+    let newdata = this.state.data.filter(item => {
+      if (item.name === this.state.user.username) {
+        item.color = color.hex
+      }
+      return item;
+    });
+
+    eventService.update(newdata).then(res => {
+      this.setState({
+        data: res,
+      })
+    })
+
+    let newdatauser = this.state.userlist.filter(item => {
+      if (item.name === this.state.user.username) {
+        item.color = color.hex
+        localStorage.setItem('user', JSON.stringify(item))
+      }
+      return item;
+    });
+
+    userService.update(newdatauser).then(res => {
+      this.setState({
+        userlist: res,
+        user: JSON.parse(localStorage.getItem('user')),
+      })
+    })
+  }
+
   render() {
     const navbarProps = {
+      maincolor: this.state.maincolor,
+      displayColorPicker: this.state.displayColorPicker,
+      opencolor: this.toggleOpencolor.bind(this),
+      closecolor: this.toggleClosecolor.bind(this),
+      changecolor: this.toggleChangecolor.bind(this),
       collapsed: this.state.collapsed,
       toggle: this.toggleNavmenu.bind(this),
       search: this.searchevent.bind(this),
       togglesearch: this.toggleBtnsearch.bind(this),
       btnsearch: this.state.btnsearch,
-      searchvalue: this.state.searchvalue
+      searchvalue: this.state.searchvalue,
+      user: this.state.user,
     }
     const siderProps = {
       width: 200,
@@ -193,7 +265,9 @@ class App extends Component {
       data: this.state.data,
       updateEvent: this.updateEvent.bind(this),
       addEvent: this.addEvent.bind(this),
-      fullcalendarprop: this.state.calendar
+      deleteEvent: this.deleteEvent.bind(this),
+      fullcalendarprop: this.state.calendar,
+      user: this.state.user,
     }
     return (
       <div className="App">
@@ -204,7 +278,7 @@ class App extends Component {
               style={{ background: '#fff', borderRight: '1px solid #ddd', boxShadow: '2px 0px 2px #ddd' }}
               {...siderProps}
             >
-              <List data={this.state.datatemp} click={this.handleClick.bind(this)} />
+              <List data={this.state.userlist} user={this.state.user} click={this.handleCheckbox.bind(this)} />
             </Sider>
             <Layout>
               <Content style={{ background: '#fff', padding: 20, margin: 0, }}>

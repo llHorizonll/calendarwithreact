@@ -1,24 +1,41 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom'
 import { Form, Icon, Input, Button, Checkbox, Avatar } from 'antd';
+import { eventService } from './services/events.service';
+import { userService } from './services/users.service';
 import './login.css';
 const FormItem = Form.Item;
 
 const Login = Form.create()(class extends Component {
   state = {
-    redirectToReferrer: false
+    redirectToReferrer: false,
+    userlist: ''
+  }
+  componentDidMount() {
+    //get data from service and save to indexDB
+    eventService.get()
+    userService.get().then(res => {
+      this.setState({
+        userlist: res,
+      })
+    })
   }
   render() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
     const handleSubmit = (e) => {
-      // e.preventDefault();
-      // this.props.form.validateFieldsAndScroll((err, values) => {
-      //   if (!err) {
-      //     console.log('Received values of form: ', values);
-      //   }
-      // });
-      localStorage.setItem('Accept-Token', 'xxx')
+      e.preventDefault();
+      this.props.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          this.state.userlist.filter(item => {
+            if (item.name === values.username) {
+              return values.color = item.color
+            }
+            return item
+          })
+          localStorage.setItem('user', JSON.stringify(values))
+        }
+      });
       this.setState({ redirectToReferrer: true })
     }
     const { from } = this.props.location.state || { from: { pathname: '/' } }
@@ -34,6 +51,7 @@ const Login = Form.create()(class extends Component {
         <Form onSubmit={handleSubmit}>
           <FormItem hasFeedback>
             {getFieldDecorator('username', {
+              initialValue: 'test',
               rules: [{ required: true, message: 'Please input your username!' }],
             })(
               <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
@@ -41,6 +59,7 @@ const Login = Form.create()(class extends Component {
           </FormItem>
           <FormItem hasFeedback>
             {getFieldDecorator('password', {
+              initialValue: 'test',
               rules: [{ required: true, message: 'Please input your Password!' }],
             })(
               <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />

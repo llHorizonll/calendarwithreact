@@ -2,71 +2,83 @@
   {
     "events": [
       {
+        "id": 1,
         "title": "All Day Event",
         "description": "description for All Day Event",
         "start": "2018-04-20"
       },
       {
+        "id": 2,
         "title": "Long Event",
         "description": "description for All Day Event",
         "start": "2018-04-07",
         "end": "2018-04-21"
       },
       {
-        "id": 999,
+        "id": 3,
         "title": "Repeating Event",
         "description": "description for All Day Event",
         "start": "2018-04-09T16:00:00"
       },
       {
-        "id": 999,
+        "id": 3,
         "title": "Repeating Event",
         "description": "description for All Day Event",
         "start": "2018-04-16T16:00:00"
       },
       {
+        "id": 4,
         "title": "Conference",
         "description": "description for All Day Event",
         "start": "2018-04-11",
         "end": "2018-04-13"
       },
       {
+        "id": 5,
         "title": "Meeting",
         "description": "description for All Day Event",
         "start": "2018-04-12T10:30:00",
         "end": "2018-04-12T12:30:00"
       },
       {
+        "id": 6,
         "title": "Meeting2",
         "start": "2018-04-12T10:30:00",
         "end": "2018-04-12T12:30:00"
       },
       {
+        "id": 7,
         "title": "Meeting3",
         "start": "2018-04-12T10:30:00",
         "end": "2018-04-12T12:30:00"
       },
       {
+        "id": 8,
         "title": "Meeting4",
         "start": "2018-04-12T10:30:00",
         "end": "2018-04-12T12:30:00"
       },
       {
+        "id": 9,
         "title": "Birthday Party",
         "start": "2018-04-13T07:00:00"
       },
       {
+        "id": 10,
         "title": "Click for Google",
         "url": "http://google.com/",
         "start": "2018-04-28"
       }
     ],
     "name": "test",
+    "color": "blue",
+    "textColor": "white",
     "show": true
   },
   {
     "events": [
       {
+        "id": 1,
         "title": "All Day Event",
         "description": "description for All Day Event",
         "start": "2018-04-21"
@@ -74,6 +86,32 @@
     ],
     "name": "test1",
     "color": "red",
+    "textColor": "white",
+    "show": true
+  },
+  {
+    "events": [
+      {
+        "id": 1,
+        "title": "All Day Event",
+        "description": "description for All Day Event",
+        "start": "2018-04-23"
+      },
+      {
+        "id": 2,
+        "title": "green",
+        "description": "description for All Day Event",
+        "start": "2018-04-25"
+      },
+      {
+        "id": 3,
+        "title": "green2",
+        "description": "description for All Day Event",
+        "start": "2018-04-26"
+      }
+    ],
+    "name": "test2",
+    "color": "green",
     "textColor": "white",
     "show": true
   }

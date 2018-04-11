@@ -13,7 +13,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      localStorage.getItem('Accept-Token') ? (
+      localStorage.getItem('user') ? (
         <Component {...props} />
       ) : (
           <Redirect

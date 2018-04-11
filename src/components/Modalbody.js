@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Form, DatePicker, Input, Modal } from 'antd';
+import { Form, DatePicker, Input, Modal, Button } from 'antd';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
 const Modalbody = Form.create()(class extends Component {
   render() {
-    const { visible, onCancel, onCreate, title, oktext, confirmLoading, startDate, endDate, event, form } = this.props;
+    const { visible, onCancel, onRemove, onCreate, title, oktext, confirmLoading,removeLoading, startDate, endDate, event, form } = this.props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -22,10 +22,22 @@ const Modalbody = Form.create()(class extends Component {
       <Modal title={title}
         width={800}
         visible={visible}
-        confirmLoading={confirmLoading}
         okText={oktext}
         onCancel={onCancel}
         onOk={onCreate}
+        footer={[(oktext === 'Create') ?
+          <Button key="back"
+            onClick={onCancel}>
+            Cancel
+          </Button> :
+          <Button key="back" type="danger" loading={removeLoading}
+            onClick={onRemove}>
+            Delete
+          </Button>,
+        <Button key="submit" type="primary" loading={confirmLoading} onClick={onCreate}>
+          {oktext}
+        </Button>,
+        ]}
       >
         <Form>
           <FormItem {...formItemLayout} label="Event">
